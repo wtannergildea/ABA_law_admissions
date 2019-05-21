@@ -4,9 +4,13 @@ author: "Tanner Gildea"
 date: "5/21/2019"
 output: html_document
 ---
+
+# ABA Reports 2018
+
 Each year, the American Bar Association requires law schools to release standardized information regarding their class profiles and admissions practices. These annual ABA reports shed useful insight into top American law schools, including information on acceptance rates, average LSAT and GPA scores, average scholarship and grant aid amounts, and the diversity of particular law school classes.
 
 As a potential future law school applicant, I wanted to analyze some of this data for myself. I accessed aggregate ABA reports from 2018 - below are some visualization of the results of my analysis.
+
 
 
 ```{r setup, include=FALSE}
@@ -27,6 +31,8 @@ grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>%
   clean_names() %>% 
   mutate(school_name = str_to_title(school_name))
 ```
+
+# Most Competitive Law Schools
 
 Here are the 20 lowest acceptance rates in 2018.
 
@@ -52,6 +58,8 @@ first_year %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
 
+# Law Schools with the Highest Average GPA's
+
 Here are top 20 GPA averages for each law school (50th percentile).
 ```{r GPA}
 ###############
@@ -76,6 +84,8 @@ first_year %>%
   
   theme(axis.text.x = element_text(angle = 90, hjust = 1))
 ```
+
+# Law Schools with the Highest Average LSAT scores
 
 Here are the top twenty LSAT scores (50th percentile).
 ```{r LSAT scores}
