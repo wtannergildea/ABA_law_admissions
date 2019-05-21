@@ -4,6 +4,10 @@ author: "Tanner Gildea"
 date: "5/21/2019"
 output: html_document
 ---
+Each year, the American Bar Association requires law schools to release standardized information regarding their class profiles and admissions practices. These annual ABA reports shed useful insight into top American law schools, including information on acceptance rates, average LSAT and GPA scores, average scholarship and grant aid amounts, and the diversity of particular law school classes.
+
+As a potential future law school applicant, I wanted to analyze some of this data for myself. I accessed aggregate ABA reports from 2018 - below are some visualization of the results of my analysis.
+
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
