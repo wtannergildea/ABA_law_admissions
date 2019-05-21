@@ -1,0 +1,99 @@
+---
+title: "ABA Reports 2018"
+author: "Tanner Gildea"
+date: "5/21/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+library(tidyverse)
+library(ggplot2)
+library(readxl)
+library(janitor)
+library(ggthemes)
+
+# Load in the two excel spreadsheets from the ABA.
+
+first_year <- read_excel("2018_First_Year_Class.xlsx") %>% 
+  clean_names() %>% 
+  mutate(school_name = str_to_title(school_name)) 
+
+grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>% 
+  clean_names() %>% 
+  mutate(school_name = str_to_title(school_name))
+```
+
+Here are the 20 lowest acceptance rates in 2018.
+
+```{r acceptance rate}
+###############
+# ACCEPTANCE RATE 
+###############
+
+first_year %>% 
+  arrange(acceptance_rate) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, acceptance_rate), y = acceptance_rate)) +
+  
+  geom_col() + 
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Here are top 20 GPA averages for each law school (50th percentile).
+```{r GPA}
+###############
+# GPA's
+###############
+
+first_year %>% 
+  arrange(desc(x50th_percentile_ugpa_all)) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, x50th_percentile_ugpa_all), y = x50th_percentile_ugpa_all)) +
+  
+  geom_col() + 
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  coord_cartesian(ylim = c(3.5,4)) +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+Here are the top twenty LSAT scores (50th percentile).
+```{r LSAT scores}
+###############
+# LSAT scores
+###############
+
+first_year %>% 
+  arrange(desc(x50th_percentile_lsat_all)) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, x50th_percentile_lsat_all), y = x50th_percentile_lsat_all)) +
+  
+  geom_col() + 
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  coord_cartesian(ylim = c(160,175)) +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
