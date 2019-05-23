@@ -34,7 +34,6 @@ grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>%
 
 # Most Competitive Law Schools
 
-Here are the 20 lowest acceptance rates in 2018.
 
 ```{r acceptance rate}
 ###############
@@ -55,12 +54,14 @@ first_year %>%
   
   theme_economist() +
   scale_fill_economist() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  labs(x = NULL,
+       y = "Acceptance Rate",
+       title = "Most Competitive Law Schools")
 ```
 
 # Law Schools with the Highest Average GPA's
 
-Here are top 20 GPA averages for each law school (50th percentile).
 ```{r GPA}
 ###############
 # GPA's
@@ -82,12 +83,15 @@ first_year %>%
   scale_fill_economist() +
   coord_cartesian(ylim = c(3.5,4)) +
   
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  labs(x = NULL,
+       y = "Median GPA",
+       title = "Median Accepted Undergraduate GPA's")
 ```
 
 # Law Schools with the Highest Average LSAT scores
 
-Here are the top twenty LSAT scores (50th percentile).
 ```{r LSAT scores}
 ###############
 # LSAT scores
@@ -109,5 +113,9 @@ first_year %>%
   scale_fill_economist() +
   coord_cartesian(ylim = c(160,175)) +
   
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+    labs(x = NULL,
+       y = "Median LSAT Score",
+       title = "Median Accepted LSAT Score")
 ```
