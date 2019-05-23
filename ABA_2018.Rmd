@@ -20,6 +20,7 @@ library(ggplot2)
 library(readxl)
 library(janitor)
 library(ggthemes)
+library(scales)
 
 # Load in the two excel spreadsheets from the ABA.
 
@@ -46,18 +47,26 @@ first_year %>%
   
   # start visualization
   
-  ggplot(aes(x= reorder(school_name, acceptance_rate), y = acceptance_rate)) +
+  ggplot(aes(x= reorder(school_name, acceptance_rate), 
+             y = acceptance_rate,
+             fill = "Blue")) +
   
   geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
   
   # theme changes
   
   theme_economist() +
   scale_fill_economist() +
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  
   labs(x = NULL,
        y = "Acceptance Rate",
-       title = "Most Competitive Law Schools")
+       title = "Most Competitive Law Schools") +
+  
+  guides(fill = FALSE)
 ```
 
 # Law Schools with the Highest Average GPA's
@@ -73,9 +82,13 @@ first_year %>%
   
   # start visualization
   
-  ggplot(aes(x= reorder(school_name, x50th_percentile_ugpa_all), y = x50th_percentile_ugpa_all)) +
+  ggplot(aes(x= reorder(school_name, x50th_percentile_ugpa_all), 
+             y = x50th_percentile_ugpa_all,
+             fill = "yellow")) +
   
-  geom_col() + 
+  geom_col() +
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
   
   # theme changes
   
@@ -84,10 +97,15 @@ first_year %>%
   coord_cartesian(ylim = c(3.5,4)) +
   
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+
   
   labs(x = NULL,
        y = "Median GPA",
-       title = "Median Accepted Undergraduate GPA's")
+       title = "Median Accepted Undergraduate GPA's") +
+  
+  guides(fill = FALSE) 
+  
+  
 ```
 
 # Law Schools with the Highest Average LSAT scores
@@ -103,9 +121,13 @@ first_year %>%
   
   # start visualization
   
-  ggplot(aes(x= reorder(school_name, x50th_percentile_lsat_all), y = x50th_percentile_lsat_all)) +
+  ggplot(aes(x= reorder(school_name, x50th_percentile_lsat_all), 
+             y = x50th_percentile_lsat_all,
+             fill = "Blue")) +
   
   geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
   
   # theme changes
   
@@ -117,5 +139,41 @@ first_year %>%
   
     labs(x = NULL,
        y = "Median LSAT Score",
-       title = "Median Accepted LSAT Score")
+       title = "Median Accepted LSAT Score") +
+  
+  guides(fill = FALSE)
+```
+
+# U.S. News and World Rankings 
+
+
+```{r ranking }
+###############
+# US News and World Ranking
+###############
+
+first_year %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, u_s_news_and_world_ranking), 
+             y = u_s_news_and_world_ranking,
+             fill = "Blue")) +
+  
+  geom_col() + 
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+    labs(x = NULL,
+       y = "Ranking",
+       title = "Top Law Schools Per 2020 U.S. News Rankings") +
+  
+  guides(fill = FALSE) 
 ```
