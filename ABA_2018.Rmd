@@ -182,7 +182,9 @@ first_year %>%
   guides(fill = FALSE) 
 ```
 
-```{r aid }
+# Median Grant Award at Top 20 Schools
+
+```{r median_grant }
 ###############
 # Financial Assistance by Selectivity
 ###############
@@ -213,6 +215,159 @@ all %>%
     labs(x = NULL,
        y = "Dollars",
        title = "Median Grant Amount") +
+  
+  guides(fill = FALSE) 
+
+```
+
+# Percent of Students Receiving More than Half Tuition 
+
+```{r percent_aid }
+###############
+# Financial Assistance by Selectivity
+###############
+
+all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, half_to_full_tuition_total_percent), 
+             y = half_to_full_tuition_total_percent,
+             fill = "Blue")) +
+  
+  geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  coord_cartesian(ylim = c(0,50)) +
+  
+    labs(x = NULL,
+       y = "Percent",
+       title = "Percent Receiving Half to Full Tuition in Grant Aid") +
+  
+  guides(fill = FALSE) 
+
+```
+
+# Percent of Students Receiving Full Tuition 
+
+```{r full_percent_aid }
+###############
+# Financial Assistance by Selectivity
+###############
+
+all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, full_tuition_total_percent), 
+             y = full_tuition_total_percent,
+             fill = "Blue")) +
+  
+  geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  coord_cartesian(ylim = c(0,20)) +
+  
+    labs(x = NULL,
+       y = "Percent",
+       title = "Percent Receiving Full Tuition in Grant Aid") +
+  
+  guides(fill = FALSE) 
+
+```
+
+# Percent of Students Receiving More than Full Tuition 
+
+```{r full_plus_percent_aid }
+###############
+# Financial Assistance by Selectivity: More than Full Tuition
+###############
+
+all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, more_than_full_tuition_total_percent), 
+             y = more_than_full_tuition_total_percent,
+             fill = "Blue")) +
+  
+  geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  coord_cartesian(ylim = c(0,10)) +
+  
+    labs(x = NULL,
+       y = "Percent",
+       title = "Percent Receiving More than Full Tuition in Grant Aid") +
+  
+  guides(fill = FALSE) 
+
+```
+
+
+# Percent of Students Receiving Any Amount of Aid
+
+```{r percent_any_aid }
+###############
+# Financial Assistance by Selectivity: Any Aid
+###############
+
+all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, total_number_receiving_grants_total_percent), 
+             y = total_number_receiving_grants_total_percent,
+             fill = "Blue")) +
+  
+  geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  coord_cartesian(ylim = c(30,100)) +
+  
+    labs(x = NULL,
+       y = "Percent",
+       title = "Percent of Students Receiving Any Grant Aid") +
   
   guides(fill = FALSE) 
 
