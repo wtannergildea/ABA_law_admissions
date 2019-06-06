@@ -31,6 +31,10 @@ first_year <- read_excel("2018_First_Year_Class.xlsx") %>%
 grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>% 
   clean_names() %>% 
   mutate(school_name = str_to_title(school_name))
+
+# Grouped tbl
+
+all <- left_join(first_year, grants, by = "school_name")
 ```
 
 # Most Competitive Law Schools
@@ -176,4 +180,42 @@ first_year %>%
        title = "Top Law Schools Per 2020 U.S. News Rankings") +
   
   guides(fill = FALSE) 
+```
+
+```{r aid }
+###############
+# Financial Assistance by Selectivity
+###############
+
+all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot() +
+  
+  geom_col(aes(x= reorder(school_name, ft_50th_percentile_grant_amount), 
+             y = ft_50th_percentile_grant_amount,
+             fill = "Blue")) + 
+  
+  geom_line(aes(x = reorder(school_name, half_to_full_tuition_total_percent), y = half_to_full_tuition_total_percent)) +
+  
+  geom_text(aes(x= reorder(school_name, ft_50th_percentile_grant_amount), 
+             y = ft_50th_percentile_grant_amount, label= u_s_news_and_world_ranking)) +
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  coord_cartesian(ylim = c(10000,45000)) +
+  
+    labs(x = NULL,
+       y = "Dollars",
+       title = "Median Grant Amount") +
+  
+  guides(fill = FALSE) 
+
 ```
