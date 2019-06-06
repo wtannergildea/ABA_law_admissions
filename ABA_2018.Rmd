@@ -28,13 +28,19 @@ first_year <- read_excel("2018_First_Year_Class.xlsx") %>%
   clean_names() %>% 
   mutate(school_name = str_to_title(school_name)) 
 
+write_rds(first_year, "ABA_Reports/first_year")
+
 grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>% 
   clean_names() %>% 
   mutate(school_name = str_to_title(school_name))
 
+write_rds(grants, "ABA_Reports/grants")
+
 # Grouped tbl
 
 all <- left_join(first_year, grants, by = "school_name")
+
+write_rds(all, "ABA_Reports/all")
 ```
 
 # Most Competitive Law Schools
