@@ -22,7 +22,7 @@ grants <- read_rds("grants")
 # USER INTERFACE
 ####################################
 
-ui <- navbarPage("2018 ABA Report Analysis", theme = shinytheme("flatly"),
+ui <- navbarPage("2018 ABA Report Analysis", theme = shinytheme("yeti"),
   
 ####################################                 
 # HOME PAGE 
@@ -56,7 +56,19 @@ tabPanel("Admissions Data",
            
           titlePanel("Admissions Data"),
            
-          plotOutput("acceptance_rate")
+          plotOutput("acceptance_rate"),
+          
+          br(),
+          br(),
+          br(),
+          
+          plotOutput("GPAs"),
+          
+          br(),
+          br(),
+          br(),
+          
+          plotOutput("LSAT")
                
                )),
 
@@ -71,26 +83,53 @@ tabPanel("Financial Data",
            # Application title
            
            titlePanel("Financial Data"),
-           
-           # This sidebar allows for the user to control the bin width of the visualization.
-           
-           sidebarLayout(
-             sidebarPanel(
-               sliderInput("bins",
-                           "# of Bins:",
-                           min = 10,
-                           max = 50,
-                           value = 30), 
-               width = 2),
-             
-             
-             # MAIN PANEL
-             
-             mainPanel(
                
-             )
+               plotOutput("median_award"),
+               
+               
+               br(),
+               br(),
+               br(),
+               
+               plotOutput("half_to_full"),
+               
+               br(),
+               br(),
+               br(),
+               
+               plotOutput("full"),
+               
+               br(),
+               br(),
+               br(),
+               
+               plotOutput("more_than_full"),
+               
+               br(),
+               br(),
+               br(),
+               
+               plotOutput("any_aid")
+               
+)),
 
-))))
+############
+# END CREDITS
+#############
+
+tabPanel("Footnotes",
+         
+         fluidPage(
+           
+           # I also want to add an acknowledgements page at the end.
+           
+           titlePanel("Sources:"),
+        
+           
+           p(paste("PLACEHOLDER TEXT"))
+           
+)))
+
 
 
 ###################################
@@ -98,7 +137,11 @@ tabPanel("Financial Data",
 ###################################
 
 server <- function(input, output) {
-   
+
+  ###############
+  # ACCEPTANCE RATE 
+  ###############
+  
    output$acceptance_rate <- renderPlot({
   
      first_year %>% 
@@ -130,6 +173,269 @@ server <- function(input, output) {
      
      
    })
+   
+   
+   ###############
+   # GPA's
+   ###############
+   
+   output$GPAs <- renderPlot({
+     
+   first_year %>% 
+     arrange(desc(x50th_percentile_ugpa_all)) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, x50th_percentile_ugpa_all), 
+                y = x50th_percentile_ugpa_all,
+                fill = "yellow")) +
+     
+     geom_col() +
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     coord_cartesian(ylim = c(3.5,4)) +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     
+     labs(x = NULL,
+          y = "Median GPA",
+          title = "Median Accepted Undergraduate GPA's") +
+     
+     guides(fill = FALSE) 
+     
+   })
+   
+   
+   ###############
+   # LSAT scores
+   ###############
+   
+   output$LSAT <- renderPlot({
+     
+   first_year %>% 
+     arrange(desc(x50th_percentile_lsat_all)) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, x50th_percentile_lsat_all), 
+                y = x50th_percentile_lsat_all,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     coord_cartesian(ylim = c(160,175)) +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     labs(x = NULL,
+          y = "Median LSAT Score",
+          title = "Median Accepted LSAT Score") +
+     
+     guides(fill = FALSE)
+   
+  })
+   
+   ###############
+   # Median Grant
+   ###############
+   
+   output$median_award <- renderPlot({
+     
+   all %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, ft_50th_percentile_grant_amount), 
+                y = ft_50th_percentile_grant_amount,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     coord_cartesian(ylim = c(10000,45000)) +
+     
+     labs(x = NULL,
+          y = "Dollars",
+          title = "Median Grant Amount") +
+     
+     guides(fill = FALSE) 
+     
+   })
+   
+   ###############
+   # Half to Full
+   ###############
+   
+   output$half_to_full <- renderPlot({
+   
+   all %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, half_to_full_tuition_total_percent), 
+                y = half_to_full_tuition_total_percent,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     coord_cartesian(ylim = c(0,50)) +
+     
+     labs(x = NULL,
+          y = "Percent",
+          title = "Percent Receiving Half to Full Tuition in Grant Aid") +
+     
+     guides(fill = FALSE) 
+     
+   })
+   
+   ###############
+   # Financial Assistance by Selectivity
+   ###############
+   
+   output$full <- renderPlot({
+     
+   all %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, full_tuition_total_percent), 
+                y = full_tuition_total_percent,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     coord_cartesian(ylim = c(0,20)) +
+     
+     labs(x = NULL,
+          y = "Percent",
+          title = "Percent Receiving Full Tuition in Grant Aid") +
+     
+     guides(fill = FALSE) 
+   
+    })
+   
+   ###############
+   # More than Full Tuition
+   ###############
+   
+   output$more_than_full <- renderPlot({
+     
+   all %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, more_than_full_tuition_total_percent), 
+                y = more_than_full_tuition_total_percent,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     coord_cartesian(ylim = c(0,10)) +
+     
+     labs(x = NULL,
+          y = "Percent",
+          title = "Percent Receiving More than Full Tuition in Grant Aid") +
+     
+     guides(fill = FALSE) 
+
+    })
+   
+   ###############
+   # Any Aid
+   ###############
+   
+   output$any_aid <- renderPlot({
+     
+   
+   all %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, total_number_receiving_grants_total_percent), 
+                y = total_number_receiving_grants_total_percent,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     coord_cartesian(ylim = c(30,100)) +
+     
+     labs(x = NULL,
+          y = "Percent",
+          title = "Percent of Students Receiving Any Grant Aid") +
+     
+     guides(fill = FALSE) 
+
+    })
+   
+
 }
 
 # Run the application 
