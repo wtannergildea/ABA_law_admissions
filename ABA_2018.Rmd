@@ -193,16 +193,14 @@ all %>%
   
   # start visualization
   
-  ggplot() +
-  
-  geom_col(aes(x= reorder(school_name, ft_50th_percentile_grant_amount), 
+  ggplot(aes(x= reorder(school_name, ft_50th_percentile_grant_amount), 
              y = ft_50th_percentile_grant_amount,
-             fill = "Blue")) + 
+             fill = "Blue")) +
   
-  geom_line(aes(x = reorder(school_name, half_to_full_tuition_total_percent), y = half_to_full_tuition_total_percent)) +
+  geom_col() + 
   
-  geom_text(aes(x= reorder(school_name, ft_50th_percentile_grant_amount), 
-             y = ft_50th_percentile_grant_amount, label= u_s_news_and_world_ranking)) +
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
+  
   # theme changes
   
   theme_economist() +
