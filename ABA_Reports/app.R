@@ -86,11 +86,16 @@ tabPanel("Financial Data",
                
                plotOutput("median_award"),
                
-               
                br(),
                br(),
                br(),
                
+               plotOutput("half_plus"),
+           
+               br(),
+               br(),
+               br(),
+           
                plotOutput("half_to_full"),
                
                br(),
@@ -112,6 +117,42 @@ tabPanel("Financial Data",
                plotOutput("any_aid")
                
 )),
+
+####################################
+# DIVERSITY STATS
+####################################
+
+tabPanel("Diversity",
+         
+         fluidPage(
+           
+           # Application title
+           
+           titlePanel("Diversity")
+           
+        
+           
+         )),
+
+####################################
+# POST-GRAD OUTCOMES
+####################################
+
+tabPanel("Post-Grad Outcomes",
+         
+         fluidPage(
+           
+           # Application title
+           
+           titlePanel("Post-Grad Outcomes")
+           
+           
+           
+         )),
+
+
+
+
 
 ############
 # END CREDITS
@@ -180,7 +221,7 @@ server <- function(input, output) {
    ###############
    
    output$GPAs <- renderPlot({
-     
+  
    first_year %>% 
      arrange(desc(x50th_percentile_ugpa_all)) %>% 
      slice(1:20) %>% 
@@ -199,7 +240,11 @@ server <- function(input, output) {
      
      theme_economist() +
      scale_fill_economist() +
-     coord_cartesian(ylim = c(3.5,4)) +
+       
+     coord_cartesian(ylim = c(3.7,4)) +
+       
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+       
      
      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
      
@@ -237,8 +282,11 @@ server <- function(input, output) {
      
      theme_economist() +
      scale_fill_economist() +
-     coord_cartesian(ylim = c(160,175)) +
-     
+       
+     coord_cartesian(ylim = c(164,175)) +
+       
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 5)) +
+       
      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
      
      labs(x = NULL,
@@ -277,7 +325,9 @@ server <- function(input, output) {
      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
      
      coord_cartesian(ylim = c(10000,45000)) +
-     
+
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+       
      labs(x = NULL,
           y = "Dollars",
           title = "Median Grant Amount") +
@@ -285,6 +335,45 @@ server <- function(input, output) {
      guides(fill = FALSE) 
      
    })
+   
+   ###############
+   # Total percent receiving half or more aid
+   ###############
+   
+   output$half_plus <- renderPlot({
+     
+   all %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:20) %>% 
+     
+     # start visualization
+     
+     ggplot(aes(x= reorder(school_name, half_plus_aid), 
+                y = half_plus_aid,
+                fill = "Blue")) +
+     
+     geom_col() + 
+     
+     geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+     
+     coord_cartesian(ylim = c(0,70)) +
+     
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+     
+     labs(x = NULL,
+          y = "Percent",
+          title = "Percent Receiving More than Half Tuition in Grant Aid") +
+     
+     guides(fill = FALSE) 
+   
+    })
    
    ###############
    # Half to Full
@@ -324,7 +413,7 @@ server <- function(input, output) {
    })
    
    ###############
-   # Financial Assistance by Selectivity
+   # FULL Tuition Assistance by Selectivity
    ###############
    
    output$full <- renderPlot({
@@ -351,7 +440,9 @@ server <- function(input, output) {
      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
      
      coord_cartesian(ylim = c(0,20)) +
-     
+       
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+       
      labs(x = NULL,
           y = "Percent",
           title = "Percent Receiving Full Tuition in Grant Aid") +
@@ -388,6 +479,9 @@ server <- function(input, output) {
      theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
      
      coord_cartesian(ylim = c(0,10)) +
+       
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 5)) +
+       
      
      labs(x = NULL,
           y = "Percent",
@@ -427,6 +521,8 @@ server <- function(input, output) {
      
      coord_cartesian(ylim = c(30,100)) +
      
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+       
      labs(x = NULL,
           y = "Percent",
           title = "Percent of Students Receiving Any Grant Aid") +

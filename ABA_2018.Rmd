@@ -36,9 +36,33 @@ grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>%
 
 write_rds(grants, "ABA_Reports/grants")
 
+ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>% 
+  clean_names()  %>% 
+  rename(school_name = school_list) %>%
+  mutate(school_name = str_to_title(school_name))
+
+write_rds(ethnicity, "ABA_Reports/ethnicity")
+
+employment <- read_excel("Employment Summary_2019.xlsx") %>% 
+  clean_names() %>% 
+  mutate(school_name = str_to_title(school_name))
+
+write_rds(employment, "ABA_Reports/employment")
+
+
 # Grouped tbl
 
-all <- left_join(first_year, grants, by = "school_name")
+all <- left_join(first_year, grants, by = "school_name") %>% 
+  
+  # create percent of half or more grant aid
+  
+  mutate(half_plus_aid = half_to_full_tuition_total_percent + 
+           full_tuition_total_percent + 
+           more_than_full_tuition_total_percent)
+
+all <- left_join(all, ethnicity, by = "school_name")
+
+all <- left_join(all, employment, by = "school_name")
 
 write_rds(all, "ABA_Reports/all")
 ```
@@ -104,10 +128,11 @@ first_year %>%
   
   theme_economist() +
   scale_fill_economist() +
-  coord_cartesian(ylim = c(3.5,4)) +
+  coord_cartesian(ylim = c(3.7,4)) +
   
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
 
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
   
   labs(x = NULL,
        y = "Median GPA",
@@ -143,9 +168,12 @@ first_year %>%
   
   theme_economist() +
   scale_fill_economist() +
-  coord_cartesian(ylim = c(160,175)) +
+  
+  coord_cartesian(ylim = c(164,175)) +
   
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 5)) +
   
     labs(x = NULL,
        y = "Median LSAT Score",
@@ -217,6 +245,8 @@ all %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   
   coord_cartesian(ylim = c(10000,45000)) +
+  
+    scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
   
     labs(x = NULL,
        y = "Dollars",
@@ -294,6 +324,8 @@ all %>%
   
   coord_cartesian(ylim = c(0,20)) +
   
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  
     labs(x = NULL,
        y = "Percent",
        title = "Percent Receiving Full Tuition in Grant Aid") +
@@ -332,9 +364,49 @@ all %>%
   
   coord_cartesian(ylim = c(0,10)) +
   
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 5)) +
+  
     labs(x = NULL,
        y = "Percent",
        title = "Percent Receiving More than Full Tuition in Grant Aid") +
+  
+  guides(fill = FALSE) 
+
+```
+
+```{r half_plus_aid }
+###############
+# Total percent receiving half or more aid
+###############
+
+all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  
+  # start visualization
+  
+  ggplot(aes(x= reorder(school_name, half_plus_aid), 
+             y = half_plus_aid,
+             fill = "Blue")) +
+  
+  geom_col() + 
+  
+  geom_text(aes(label= u_s_news_and_world_ranking)) +
+  
+  # theme changes
+  
+  theme_economist() +
+  scale_fill_economist() +
+  
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  
+  coord_cartesian(ylim = c(0,70)) +
+  
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  
+    labs(x = NULL,
+       y = "Percent",
+       title = "Percent Receiving More than Half Tuition in Grant Aid") +
   
   guides(fill = FALSE) 
 
@@ -370,6 +442,9 @@ all %>%
   theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   
   coord_cartesian(ylim = c(30,100)) +
+  
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+
   
     labs(x = NULL,
        y = "Percent",

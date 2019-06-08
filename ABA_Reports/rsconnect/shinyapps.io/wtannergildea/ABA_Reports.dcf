@@ -1,0 +1,12 @@
+name: ABA_Reports
+title: ABA_Reports
+username:
+account: wtannergildea
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 969129
+bundleId: 2135975
+url: https://wtannergildea.shinyapps.io/ABA_Reports/
+when: 1559841889.78579
+asMultiple: FALSE
+asStatic: FALSE
