@@ -22,19 +22,29 @@ library(janitor)
 library(ggthemes)
 library(scales)
 
-# Load in the two excel spreadsheets from the ABA.
+# Load in the four excel spreadsheets from the ABA.
+
+# Selectivity, GPA, LSAT data
 
 first_year <- read_excel("2018_First_Year_Class.xlsx") %>% 
   clean_names() %>% 
   mutate(school_name = str_to_title(school_name)) 
 
-write_rds(first_year, "ABA_Reports/first_year")
+
+# Scholarship and Grant data
 
 grants <- read_excel("2018_Grants_and_Scholarships.xlsx") %>% 
   clean_names() %>% 
-  mutate(school_name = str_to_title(school_name))
+  mutate(school_name = str_to_title(school_name)) %>% 
+  
+  # create percent of half or more grant aid
+  
+  mutate(half_plus_aid = half_to_full_tuition_total_percent + 
+           full_tuition_total_percent + 
+           more_than_full_tuition_total_percent)
 
-write_rds(grants, "ABA_Reports/grants")
+
+# Ethnicity data
 
 ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>% 
   clean_names()  %>% 
@@ -49,7 +59,7 @@ ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>%
   mutate_if(is.numeric, round, 2)
 
 
-write_rds(ethnicity, "ABA_Reports/ethnicity")
+# Employment and Post-grad Data
 
 employment <- read_excel("Employment Summary_2019.xlsx") %>% 
   clean_names() %>% 
@@ -59,24 +69,24 @@ employment <- read_excel("Employment Summary_2019.xlsx") %>%
   mutate(third_largest_employment = str_to_title(third_largest_employment)) 
 
 
-write_rds(employment, "ABA_Reports/employment")
+# Join all datasets to the master "all" set
 
-
-# Grouped tbl
-
-all <- left_join(first_year, grants, by = "school_name") %>% 
+all <- left_join(first_year, grants, by = "school_name") 
   
-  # create percent of half or more grant aid
-  
-  mutate(half_plus_aid = half_to_full_tuition_total_percent + 
-           full_tuition_total_percent + 
-           more_than_full_tuition_total_percent)
-
 all <- left_join(all, ethnicity, by = "school_name")
 
 all <- left_join(all, employment, by = "school_name")
 
+
+# Write all datasets to rds files
+
 write_rds(all, "ABA_Reports/all")
+
+write_rds(ethnicity, "ABA_Reports/ethnicity")
+write_rds(grants, "ABA_Reports/grants")
+write_rds(first_year, "ABA_Reports/first_year")
+write_rds(employment, "ABA_Reports/employment")
+
 ```
 
 # Most Competitive Law Schools
