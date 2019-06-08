@@ -59,7 +59,7 @@ ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>%
   mutate_if(is.numeric, round, 2)
 
 
-# Employment and Post-grad Data
+# Employment and Post-grad Data 
 
 employment <- read_excel("Employment Summary_2019.xlsx") %>% 
   clean_names() %>% 
@@ -479,7 +479,19 @@ all %>%
 # Diversity profiles of top 20 schools
 ```{r ethnicity}
 ###############
-# Ethnicity Top 20
+# Ethnicity Top 20 (percent white, minority, and international)
+###############
+
+
+
+
+
+```
+
+# Post-grad pursuits
+```{r post-grad}
+###############
+# Post-grad Top 20 (good spot for input function in shiny)
 ###############
 
 
