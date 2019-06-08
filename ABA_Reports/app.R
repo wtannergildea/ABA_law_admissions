@@ -133,10 +133,23 @@ tabPanel("Diversity",
            
            titlePanel("Diversity"),
            
+           sidebarLayout(
+            sidebarPanel(
+              
+              checkboxGroupInput("school",
+                           "Select at least two schools to compare.",
+                           choices = list("Harvard University" = 1,
+                                          "Yale University" = 2,
+                                          "Stanford University" = 3))),
+
+           
+          mainPanel(
+             
+           
            plotlyOutput("ethnicity")
         
            
-         )),
+         )))),
 
 ####################################
 # POST-GRAD OUTCOMES
@@ -544,7 +557,8 @@ server <- function(input, output) {
      
    ethn_vis %>% 
      arrange(u_s_news_and_world_ranking) %>% 
-     slice(1:80) %>% 
+     slice(1:80) %>%
+     filter(school_name == input$school) %>% 
      
      ggplot(aes(x= reorder(school_name, - percent), 
                 y = percent, 
@@ -561,9 +575,8 @@ server <- function(input, output) {
      theme_economist() +
      scale_fill_economist() +
      
-     theme(axis.text.x = NULL) +
-     
-     # coord_cartesian(ylim = c(30,100)) +
+     theme(axis.text.x = element_blank(),
+           axis.title.x = element_blank()) +
      
      scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
      
