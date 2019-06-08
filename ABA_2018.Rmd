@@ -39,13 +39,25 @@ write_rds(grants, "ABA_Reports/grants")
 ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>% 
   clean_names()  %>% 
   rename(school_name = school_list) %>%
-  mutate(school_name = str_to_title(school_name))
+  mutate(school_name = str_to_title(school_name)) %>% 
+  mutate(percent_minority = (minority_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate(percent_white = (white_jd_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate(percent_international = (nonresident_alien_jd_degrees_awd / total_degrees_awarded)*100) %>%
+  
+  # great rounding feature!
+  
+  mutate_if(is.numeric, round, 2)
+
 
 write_rds(ethnicity, "ABA_Reports/ethnicity")
 
 employment <- read_excel("Employment Summary_2019.xlsx") %>% 
   clean_names() %>% 
-  mutate(school_name = str_to_title(school_name))
+  mutate(school_name = str_to_title(school_name)) %>% 
+  mutate(first_largest_employment = str_to_title(first_largest_employment)) %>% 
+  mutate(second_largest_employment = str_to_title(second_largest_employment)) %>% 
+  mutate(third_largest_employment = str_to_title(third_largest_employment)) 
+
 
 write_rds(employment, "ABA_Reports/employment")
 
@@ -453,3 +465,16 @@ all %>%
   guides(fill = FALSE) 
 
 ```
+
+# Diversity profiles of top 20 schools
+```{r ethnicity}
+###############
+# Ethnicity Top 20
+###############
+
+
+
+
+
+```
+
