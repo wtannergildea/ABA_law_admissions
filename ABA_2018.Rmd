@@ -53,6 +53,7 @@ ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>%
   mutate(percent_minority = (minority_degrees_awd / total_degrees_awarded)*100) %>% 
   mutate(percent_white = (white_jd_degrees_awd / total_degrees_awarded)*100) %>% 
   mutate(percent_international = (nonresident_alien_jd_degrees_awd / total_degrees_awarded)*100) %>%
+  mutate(percent_race_unknown = (race_unk_jd_degrees_awd / total_degrees_awarded)*100) %>% 
   
   # great rounding feature!
   
@@ -482,6 +483,12 @@ all %>%
 # Ethnicity Top 20 (percent white, minority, and international)
 ###############
 
+ethn <- all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  view()
+  
+  
 
 
 
@@ -493,7 +500,10 @@ all %>%
 ###############
 # Post-grad Top 20 (good spot for input function in shiny)
 ###############
-
+grad <- all %>% 
+  arrange(u_s_news_and_world_ranking) %>% 
+  slice(1:20) %>% 
+  view()
 
 
 
