@@ -21,6 +21,7 @@ library(readxl)
 library(janitor)
 library(ggthemes)
 library(scales)
+library(plotly)
 
 # Load in the four excel spreadsheets from the ABA.
 
@@ -50,10 +51,10 @@ ethnicity <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>%
   clean_names()  %>% 
   rename(school_name = school_list) %>%
   mutate(school_name = str_to_title(school_name)) %>% 
-  mutate(percent_minority = (minority_degrees_awd / total_degrees_awarded)*100) %>% 
-  mutate(percent_white = (white_jd_degrees_awd / total_degrees_awarded)*100) %>% 
-  mutate(percent_international = (nonresident_alien_jd_degrees_awd / total_degrees_awarded)*100) %>%
-  mutate(percent_race_unknown = (race_unk_jd_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate('Minority' = (minority_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate('White' = (white_jd_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate('International' = (nonresident_alien_jd_degrees_awd / total_degrees_awarded)*100) %>%
+  mutate('Unknown Race' = (race_unk_jd_degrees_awd / total_degrees_awarded)*100) %>% 
   
   # great rounding feature!
   
@@ -89,7 +90,7 @@ write_rds(first_year, "ABA_Reports/first_year")
 write_rds(employment, "ABA_Reports/employment")
 
 
-# test
+# FOR LATER VIS's
 
 # employment_test <- read_excel("Employment Summary_2019.xlsx") %>% 
 #   clean_names() %>% 
@@ -103,18 +104,20 @@ ethnicity_test <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>%
   clean_names()  %>% 
   rename(school_name = school_list) %>%
   mutate(school_name = str_to_title(school_name)) %>% 
-  mutate(percent_minority = (minority_degrees_awd / total_degrees_awarded)*100) %>% 
-  mutate(percent_white = (white_jd_degrees_awd / total_degrees_awarded)*100) %>% 
-  mutate(percent_international = (nonresident_alien_jd_degrees_awd / total_degrees_awarded)*100) %>%
-  mutate(percent_race_unknown = (race_unk_jd_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate('Minority' = (minority_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate('White' = (white_jd_degrees_awd / total_degrees_awarded)*100) %>% 
+  mutate('International' = (nonresident_alien_jd_degrees_awd / total_degrees_awarded)*100) %>%
+  mutate('Unknown Race' = (race_unk_jd_degrees_awd / total_degrees_awarded)*100) %>% 
   
   # great rounding feature!
   
   mutate_if(is.numeric, round, 2) %>% 
   
-  gather(percent_minority, percent_white, percent_race_unknown, percent_international, key = "label", value = "percent") 
+  gather(Minority, White, 'Unknown Race', International, key = "label", value = "percent") 
 
-ethnicity_test_2 <- left_join(first_year, ethnicity_test, by = "school_name")
+ethn_vis <- left_join(first_year, ethnicity_test, by = "school_name")
+
+write_rds(ethn_vis, "ABA_Reports/ethn_vis")
 
 ```
 
@@ -511,14 +514,17 @@ all %>%
 # Ethnicity Top 20 (percent white, minority, and international)
 ###############
 
-ethnicity_test_2 %>% 
+ethnicity_vis <- ethnicity_test_2 %>% 
   arrange(u_s_news_and_world_ranking) %>% 
   slice(1:80) %>% 
 
-  ggplot(aes(x= school_name, 
-             y = percent, fill = label)) +
+  ggplot(aes(x= reorder(school_name, - percent), 
+             y = percent, 
+             fill = label)) +
   
   geom_col(position = "dodge") + 
+  
+  facet_grid(~label) +
   
   # geom_text(aes(label= u_s_news_and_world_ranking)) +
   
@@ -527,18 +533,19 @@ ethnicity_test_2 %>%
   theme_economist() +
   scale_fill_economist() +
   
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  theme(axis.text.x = NULL) +
   
   # coord_cartesian(ylim = c(30,100)) +
   
-  # scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+  scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
 
-  
     labs(x = NULL,
        y = "Percent",
-       title = "Ethnicity of Most Recent Graduating Class") +
+       title = "Diversity of Most Recent Graduating Class") +
   
-  guides(fill = FALSE) 
+  guides(fill = FALSE)
+
+ggplotly(p = ethnicity_vis)
   
 ```
 

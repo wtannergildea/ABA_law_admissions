@@ -8,6 +8,7 @@ library(janitor)
 library(ggthemes)
 library(shinythemes)
 library(scales)
+library(plotly)
 
 # Read in the two separate and one combined rds files.
 
@@ -16,6 +17,8 @@ all <- read_rds("all")
 first_year <- read_rds("first_year")
   
 grants <- read_rds("grants")
+
+ethn_vis <- read_rds("ethn_vis")
 
 
 ####################################                 
@@ -128,8 +131,9 @@ tabPanel("Diversity",
            
            # Application title
            
-           titlePanel("Diversity")
+           titlePanel("Diversity"),
            
+           plotlyOutput("ethnicity")
         
            
          )),
@@ -530,6 +534,46 @@ server <- function(input, output) {
      guides(fill = FALSE) 
 
     })
+   
+   
+   ###############
+   # Ethnicity Top 20 (percent white, minority, and international)
+   ###############
+   
+   output$ethnicity <- renderPlotly({
+     
+   ethn_vis %>% 
+     arrange(u_s_news_and_world_ranking) %>% 
+     slice(1:80) %>% 
+     
+     ggplot(aes(x= reorder(school_name, - percent), 
+                y = percent, 
+                fill = label)) +
+     
+     geom_col(position = "dodge") + 
+     
+     facet_grid(~label) +
+     
+     # geom_text(aes(label= u_s_news_and_world_ranking)) +
+     
+     # theme changes
+     
+     theme_economist() +
+     scale_fill_economist() +
+     
+     theme(axis.text.x = NULL) +
+     
+     # coord_cartesian(ylim = c(30,100)) +
+     
+     scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
+     
+     labs(x = NULL,
+          y = "Percent",
+          title = "Diversity of Most Recent Graduating Class") +
+     
+     guides(fill = FALSE)
+   
+   })
    
 
 }
