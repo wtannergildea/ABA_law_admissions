@@ -137,10 +137,13 @@ tabPanel("Diversity",
             sidebarPanel(
               
               checkboxGroupInput("school",
-                           "Select at least two schools to compare.",
-                           choices = list("Harvard University" = 1,
-                                          "Yale University" = 2,
-                                          "Stanford University" = 3))),
+                                "Select at least two schools to compare.",
+                                choices = list("Harvard University" = "Harvard University",
+                                          "Yale University" = "Yale University",
+                                          "Stanford University" = "Stanford University"),
+                                selected = c("Harvard University",
+                                             "Yale University",
+                                             "Stanford University"))),
 
            
           mainPanel(
@@ -560,6 +563,7 @@ server <- function(input, output) {
      slice(1:80) %>%
      filter(school_name == input$school) %>% 
      
+       
      ggplot(aes(x= reorder(school_name, - percent), 
                 y = percent, 
                 fill = label)) +
@@ -567,8 +571,6 @@ server <- function(input, output) {
      geom_col(position = "dodge") + 
      
      facet_grid(~label) +
-     
-     # geom_text(aes(label= u_s_news_and_world_ranking)) +
      
      # theme changes
      
