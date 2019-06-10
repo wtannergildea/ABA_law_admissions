@@ -138,12 +138,49 @@ tabPanel("Diversity",
               
               checkboxGroupInput("school",
                                 "Select at least two schools to compare.",
+                                
                                 choices = list("Harvard University" = "Harvard University",
                                           "Yale University" = "Yale University",
-                                          "Stanford University" = "Stanford University"),
+                                          "Stanford University" = "Stanford University",
+                                          "Pennsylvania, University Of" = "Pennsylvania, University Of",
+                                          "Virginia, University Of" = "Virginia, University Of",
+                                          "Columbia University" = "Columbia University",
+                                          "Chicago, University Of" = "Chicago, University Of",
+                                          "Southern California, University Of" = "Southern California, University Of",
+                                          "Northwestern University" = "Northwestern University",
+                                          "Michigan, University Of" = "Michigan, University Of",
+                                          "California-Berkeley, University Of" = "California-Berkeley, University Of",
+                                          "Duke University" = "Duke University",
+                                          "Texas At Austin, University Of" = "Texas At Austin, University Of",
+                                          "Cornell University" = "Cornell University",
+                                          "Georgetown University" = "Georgetown University",
+                                          "California-Los Angeles, University Of" = "California-Los Angeles, University Of",
+                                          "New York University" = "New York University",
+                                          "Vanderbilt University" = "Vanderbilt University",
+                                          "Washington University" = "Washington University",
+                                          "Minnesota, University Of" = "Minnesota, University Of"),
+                                
+                                
                                 selected = c("Harvard University",
                                              "Yale University",
                                              "Stanford University"))),
+                                             # "Pennsylvania, University Of",
+                                             # "Virginia, University Of",
+                                             # "Columbia University",
+                                             # "Chicago, University Of",
+                                             # "Southern California, University Of",
+                                             # "Northwestern University",
+                                             # "Michigan, University Of",
+                                             # "California-Berkeley, University Of",
+                                             # "Duke University",
+                                             # "Texas At Austin, University Of",
+                                             # "Cornell University",
+                                             # "Georgetown University",
+                                             # "California-Los Angeles, University Of",
+                                             # "New York University",
+                                             # "Vanderbilt University",
+                                             # "Washington University",
+                                             # "Minnesota, University Of"))),
 
            
           mainPanel(
@@ -559,12 +596,10 @@ server <- function(input, output) {
    output$ethnicity <- renderPlotly({
      
    ethn_vis %>% 
-     arrange(u_s_news_and_world_ranking) %>% 
-     slice(1:80) %>%
-     filter(school_name == input$school) %>% 
-     
+     filter(school_name %in% input$school) %>%
+     gather('Minority Race', White, 'Unknown Race', International, key = "label", value = "percent") %>% 
        
-     ggplot(aes(x= reorder(school_name, - percent), 
+     ggplot(aes(x= school_name, 
                 y = percent, 
                 fill = label)) +
      
@@ -578,7 +613,8 @@ server <- function(input, output) {
      scale_fill_economist() +
      
      theme(axis.text.x = element_blank(),
-           axis.title.x = element_blank()) +
+           axis.title.x = element_blank(),
+           axis.ticks.x = element_blank()) +
      
      scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
      

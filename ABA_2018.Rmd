@@ -111,11 +111,10 @@ ethnicity_test <- read_excel("2018_JD_Enrollment_and_Ethnicity-2.xlsx") %>%
   
   # great rounding feature!
   
-  mutate_if(is.numeric, round, 2) %>% 
+  mutate_if(is.numeric, round, 2)
   
-  gather('Minority Race', White, 'Unknown Race', International, key = "label", value = "percent") 
 
-ethn_vis <- left_join(first_year, ethnicity_test, by = "school_name")
+ethn_vis <- left_join(first_year, ethnicity_test_2, by = "school_name")
 
 write_rds(ethn_vis, "ABA_Reports/ethn_vis")
 
