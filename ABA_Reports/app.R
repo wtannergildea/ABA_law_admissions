@@ -41,8 +41,21 @@ ui <- navbarPage("2018 ABA Report Analysis", theme = shinytheme("yeti"),
    
    # INSERT INTRODUCTORY TEXT HERE
    
-   p(paste("BLAH BLAH BLAH TEST"))
+   br(),
    
+   p(paste("Each year, thousands of aspiring lawyers apply to law schools across the U.S. Although the number of total applications to American law schools hit their lowest level in X years in 201X, the competition for admission to the 'top' law schools remains steep. Near-perfect grade point averages, LSAT scores, and a small fortune are only part of the package today's applicants must trade for a coveted acceptance letter.")),
+   
+   br(),
+   
+   p(paste("Even for the well-credentialed, however, all applicants to law schools are faced with the same challenge: misinformation and disparate statistics. This dashboard aims to rectify this problem.")),
+   
+   br(),
+   
+   p(paste("Each year, law schools are mandated by the American Bar Association to compile a wide variety of statistics. These 'ABA reports' are then aggregated and released to the public. In them, you'll find the median accepted GPA's and LSAT scores at the top law schools. Trying to maximize your chances at grant aid? You'll find which schools are the most generous - and most stingey. You'll also find other statistics on measures of diversity and post-grad employment outcomes, instead of digging for this information yourself.")),
+   
+   br(),
+   
+   p(paste("I'd wager that most applicants are unaware these reports exist. As you consider applying to law school, I hope this ABA report dashboard clears up some of your questions. Good luck!"))
    
       )
    ),
