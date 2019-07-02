@@ -51,7 +51,7 @@ ui <- navbarPage("2018 ABA Report Analysis", theme = shinytheme("yeti"),
    
    br(),
    
-   p(paste("Each year, law schools are mandated by the American Bar Association to compile a wide variety of statistics. These 'ABA reports' are then aggregated and released to the public. In them, you'll find the median accepted GPA's and LSAT scores at the top law schools. Trying to maximize your chances at grant aid? You'll find which schools are the most generous - and most stingey. You'll also find other statistics on measures of diversity and post-grad employment outcomes, instead of digging for this information yourself.")),
+   p(paste("Annually, law schools are mandated by the American Bar Association to compile a wide variety of statistics. These 'ABA reports' are then aggregated and released to the public. In them, you'll find the median accepted GPA's and LSAT scores at the top law schools. Trying to maximize your chances at grant aid? You'll find which schools are the most generous - and most stingey. You'll also find other statistics on measures of diversity and post-grad employment outcomes, instead of digging for this information yourself.")),
    
    br(),
    
@@ -129,12 +129,24 @@ tabPanel("Financial Data",
            sidebarLayout(
              sidebarPanel(
                
-               h3("Can I get in?"),
+               h3("Can I pay?"),
                
-               h4("This is the burning question prospective applicants want answered the most."),
+               h4("It's not often the first question applicants ask, but it should be the most important."),
                
-               h5("Although admissions committees will consider your personal statement, letters of recommendation, your resume, and other factors in their decision,
-                  the two most important numbers are your undergraduate grade point average (GPA) and your LSAT score.")
+               br(),
+               
+               h5("Law school is expensive, and many graduates carry tens of thousands of dollars in debt. But that doesn't have to be the case."),
+               
+               br(),
+               
+               h5("While the tippy-top schools such as Yale and Harvard offer no merit-based aid,
+                  you can win signficant cash to go to some of their top-ranked peers. If you're an above-average applicant and willing to swallow some of your pride,
+                  attending a relatively less-selective school could save you some serious cash."),
+               
+               br(),
+               
+               h5("Below these statistics, I've listed a number of the most prestigious scholarships available at top law schools.")
+               
                ),
              
              mainPanel(
@@ -273,10 +285,27 @@ tabPanel("Footnotes",
            
            # I also want to add an acknowledgements page at the end.
            
-           titlePanel("Sources:"),
-        
+           titlePanel("Footnotes"),
            
-           p(paste("PLACEHOLDER TEXT"))
+           br(),
+        
+           p(paste("My name is Tanner Gildea. I am a recent graduate of Harvard College.")),
+
+           br(),
+           
+           p(paste("You may contact me at tannergildea@icloud.com.")),
+           
+           br(),
+
+           p(paste("I may or may not apply to law school in the future.")),
+           
+           br(),
+           
+           p(paste("All data is publicly accessible here from the ABA website.")),
+           
+           br(),
+           
+           p(paste("This dashboard's code is available on my Github here."))
            
 )))
 
