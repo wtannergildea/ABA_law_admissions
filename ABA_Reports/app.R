@@ -43,7 +43,7 @@ ui <- navbarPage("2018 ABA Report Analysis", theme = shinytheme("yeti"),
    
    br(),
    
-   p(paste("Each year, thousands of aspiring lawyers apply to law schools across the U.S. Although the number of total applications to American law schools hit their lowest level in X years in 201X, the competition for admission to the 'top' law schools remains steep. Near-perfect grade point averages, LSAT scores, and a small fortune are only part of the package today's applicants must trade for a coveted acceptance letter.")),
+   p(paste("Each year, thousands of aspiring lawyers apply to law schools across the U.S. Although the total number of enrolled 1L's across the U.S. hit their lowest level in 41 years in 2015 [1], the competition for admission to the 'top' law schools remains steep. Near-perfect grade point averages, LSAT scores, and a small fortune are only part of the package today's applicants must trade for a coveted acceptance letter.")),
    
    br(),
    
@@ -55,7 +55,17 @@ ui <- navbarPage("2018 ABA Report Analysis", theme = shinytheme("yeti"),
    
    br(),
    
-   p(paste("I'd wager that most applicants are unaware these reports exist. As you consider applying to law school, I hope this ABA report dashboard clears up some of your questions. Good luck!"))
+   p(paste("I'd wager that most applicants are unaware these reports exist. As you consider applying to law school, I hope this ABA report dashboard clears up some of your questions. Good luck!")),
+   
+   br(),
+   
+   br(),
+   
+   br(),
+   
+   p(paste("[1] According to Law School Transparency, 37,056 first-year law students enrolled in the United States in 2015."))
+   
+   
    
       )
    ),
@@ -71,7 +81,23 @@ tabPanel("Admissions Data",
            # Application title
            
           titlePanel("Admissions Data"),
-           
+          
+          sidebarLayout(
+            sidebarPanel(
+              
+              h3("Can I get in?"),
+              
+              h4("This is the burning question prospective applicants want answered the most."),
+              
+              h5("Although admissions committees will consider your personal statement, letters of recommendation, your resume, and other factors in their decision,
+                 the two most important numbers are your undergraduate grade point average (GPA) and your LSAT score.")
+            ),
+          
+          mainPanel(
+        
+          
+          br(),
+        
           plotOutput("acceptance_rate"),
           
           br(),
@@ -86,7 +112,7 @@ tabPanel("Admissions Data",
           
           plotOutput("LSAT")
                
-               )),
+               )))),
 
 ####################################
 # FINANCIAL DATA 
@@ -99,6 +125,19 @@ tabPanel("Financial Data",
            # Application title
            
            titlePanel("Financial Data"),
+           
+           sidebarLayout(
+             sidebarPanel(
+               
+               h3("Can I get in?"),
+               
+               h4("This is the burning question prospective applicants want answered the most."),
+               
+               h5("Although admissions committees will consider your personal statement, letters of recommendation, your resume, and other factors in their decision,
+                  the two most important numbers are your undergraduate grade point average (GPA) and your LSAT score.")
+               ),
+             
+             mainPanel(
                
                plotOutput("median_award"),
                
@@ -132,7 +171,7 @@ tabPanel("Financial Data",
                
                plotOutput("any_aid")
                
-)),
+)))),
 
 ####################################
 # DIVERSITY STATS
